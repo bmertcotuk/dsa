@@ -1,8 +1,8 @@
 package com.bmcotuk.dsaa.algorithms;
 
-import com.bmcotuk.dsaa.common.KeyValuePair;
 import com.bmcotuk.dsaa.common.Node;
 import com.bmcotuk.dsaa.datastructures.LinkedList;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,6 +15,14 @@ import java.util.Map;
  */
 @Component
 public class OtherAlgorithms {
+
+    // TODO: Finalize the ultimate ordering
+    /*
+     * Rate of increase in order
+     * -> O(n!) > O(2^n) > O(n^2) > O(n*logn) > O(n) > O(logn) > O(1)
+     * -> O(n^n) > O(n!)
+     * -> O((2^n) * n!) > O(n!)
+     */
 
     /**
      * time: O(2^n) - branches^depth
@@ -32,7 +40,7 @@ public class OtherAlgorithms {
      * them iterative.
      * More at: https://dzone.com/articles/memoization-make-recursive-algorithms-efficient
      * <p>
-     * time: O(n)
+     * time: O(n) - because each call is called once!
      * space: O(n)
      */
     public int nthFibonacciTopDownDP(int n) {
@@ -57,18 +65,18 @@ public class OtherAlgorithms {
      * space: O(1)
      */
     public int nthFibonacciBottomUpDP(int n) {
-        if (n == 0) {
+        if (n <= 1) {
             return n;
         }
         int previous = 0;
         int current = 1;
 
-        for (int i = 2; i < n; i++) { // loop starts from 2 since we gave the minimum requirement
+        for (int i = 2; i <= n; i++) { // loop starts from 2 since we gave the minimum requirement
             int next = previous + current;
             previous = current;
             current = next;
         }
-        return current + previous;
+        return current;
     }
 
     /**
@@ -98,7 +106,7 @@ public class OtherAlgorithms {
         if (n <= 1) return false;
 
         int roundedSquareRoot = (int) Math.floor(Math.sqrt(n));
-        for (int i = 2; i <= roundedSquareRoot; i++) { // i should not start from 1 :(
+        for (int i = 2; i <= roundedSquareRoot; i++) { // or better check for (int i = 2; i * i <= n; i++), <= correct
             if (n % i == 0) {
                 return false;
             }
@@ -118,18 +126,18 @@ public class OtherAlgorithms {
         if (n == 2) { // important to add
             return true;
         }
-        return isPrimeRecursion(2, n);
+        return isPrimeRecursion(n, 2);
     }
 
-    private boolean isPrimeRecursion(int i, int n) {
+    private boolean isPrimeRecursion(int n, int divisor) {
 
-        if (n % i == 0) { // check this first or it will fail
+        if (n % divisor == 0) {
             return false;
         }
-        if (i * i >= n) {
+        if (divisor * divisor > n) { // not equal here, negation of the condition in iterative version
             return true;
         }
-        return isPrimeRecursion(i + 1, n);
+        return isPrimeRecursion(n, divisor + 1);
     }
 
     /**
@@ -158,7 +166,7 @@ public class OtherAlgorithms {
 
     /**
      * time: O(n!*n + n*n!*n) = O(n^2*n!)
-     * space: O(n^2)
+     * space: O(n) - The dominant factor is the recursive stack depth, which is O(n). Since strings are immutable in Java and not reused between calls, these don't contribute to the overall recursive memory footprint. Therefore, not O(n^2)!
      */
     public void printPermutationsOfString(String str) {
         permutationRecursion(str, "");
@@ -202,7 +210,7 @@ public class OtherAlgorithms {
     }
 
     private char nthLetterOfTheAlphabet(int n) {
-        return (char) (((int) 'a') + n);
+        return (char) ('a' + n);
     }
 
     private boolean isInOrder(String s) {
@@ -221,26 +229,27 @@ public class OtherAlgorithms {
      * space: O(n^2)
      */
     public void printAllPositiveIntegerSolutionsToCubicEquation(int n) {
-
-        Map<Integer, List<KeyValuePair<Integer, Integer>>> resultListMap = new HashMap<>();
+        // first, tally results
+        Map<Integer, List<Pair<Integer, Integer>>> result2SolutionMap = new HashMap<>();
         for (int a = 1; a <= n; a++) {
             for (int b = 1; b <= n; b++) {
-                KeyValuePair<Integer, Integer> pair = new KeyValuePair<>(a, b);
-                int result = a * a * a + b * b * b;
-                List<KeyValuePair<Integer, Integer>> list = resultListMap.getOrDefault(result, new ArrayList<>());
-                list.add(pair);
-                resultListMap.put(result, list);
+                int result = (int) Math.pow(a, 3) + (int) Math.pow(b, 3);
+                // computeIfAbsent is more elegant
+                result2SolutionMap.computeIfAbsent(result, k -> new ArrayList<>())
+                        .add(Pair.of(a, b));
             }
         }
-        for (Map.Entry<Integer, List<KeyValuePair<Integer, Integer>>> entry : resultListMap.entrySet()) {
-            List<KeyValuePair<Integer, Integer>> resultList = entry.getValue();
-            for (KeyValuePair<Integer, Integer> pair1 : resultList) {
-                for (KeyValuePair<Integer, Integer> pair2 : resultList) {
+
+        // then, just like in SQL iterate twice on the same set to handle all cases
+        for (List<Pair<Integer, Integer>> solutions : result2SolutionMap.values()) {
+            for (Pair<Integer, Integer> pair1 : solutions) {
+                for (Pair<Integer, Integer> pair2 : solutions) {
                     System.out.println("Pair1" + pair1 + " - Pair2" + pair2);
                 }
             }
         }
     }
+
 
     /**
      * Two sorted integer arrays, of the same size, each with all distinct elements.
@@ -345,5 +354,42 @@ public class OtherAlgorithms {
             fastPointer = fastPointer.getNext().getNext();
         }
         return list;
+    }
+
+    /**
+     * Generates list of primes until a number
+     * <p>
+     * time: O(n*log(logn))
+     * space: O(n)
+     */
+    public boolean[] sieveOfEratosthenes(int n) {
+        // assume everything is prime at first
+        boolean[] primeFlags = new boolean[n + 1];
+        for (int i = 2; i < primeFlags.length; i++) { // start filling from 2!
+            primeFlags[i] = true;
+        }
+
+        int currentPrime = 2;
+        while (currentPrime * currentPrime <= n) { // mark non primes until the square root
+            markNonPrimes(primeFlags, currentPrime);
+            currentPrime = getNextPrime(primeFlags, currentPrime);
+        }
+
+        return primeFlags;
+    }
+
+    // n*n, n*(n+1), n*(n+2) - mark all multiples starting from the first prime which is 2
+    private void markNonPrimes(boolean[] primeFlags, int currentPrime) {
+        for (int i = currentPrime * currentPrime; i < primeFlags.length; i += currentPrime) {
+            primeFlags[i] = false;
+        }
+    }
+
+    private int getNextPrime(boolean[] primeFlags, int currentPrime) {
+        int nextPrime = currentPrime + 1;
+        while (nextPrime < primeFlags.length && !primeFlags[nextPrime]) {
+            nextPrime++;
+        }
+        return nextPrime;
     }
 }

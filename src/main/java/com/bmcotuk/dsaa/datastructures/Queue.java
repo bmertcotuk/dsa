@@ -33,6 +33,7 @@ public class Queue<T> {
     public T dequeue() {
         T data = peek();
         first = first.getNext();
+        // do not forget to update last
         if (first == null) {
             last = null;
         }

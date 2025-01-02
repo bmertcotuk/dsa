@@ -5,12 +5,16 @@ import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LinkedListTest {
 
     @Test
-    void shouldAppendElements() {
+    void test_appendElements() {
         LinkedList<String> list = new LinkedList<>();
         list.appendToTail("a");
         list.appendToTail("b");
@@ -28,7 +32,7 @@ class LinkedListTest {
     }
 
     @Test
-    void shouldRemoveElementFromHead() {
+    void test_removeElementFromHead() {
         LinkedList<String> list = new LinkedList<>();
         list.appendToTail("a");
         list.appendToTail("b");
@@ -43,7 +47,7 @@ class LinkedListTest {
     }
 
     @Test
-    void shouldRemoveElementBetweenHeadAndTail() {
+    void test_removeElementBetweenHeadAndTail() {
         LinkedList<String> list = new LinkedList<>();
         list.appendToTail("a");
         list.appendToTail("b");
@@ -58,7 +62,7 @@ class LinkedListTest {
     }
 
     @Test
-    void shouldRemoveElementFromTail() {
+    void test_removeElementFromTail() {
         LinkedList<String> list = new LinkedList<>();
         list.appendToTail("a");
         list.appendToTail("b");
@@ -73,7 +77,7 @@ class LinkedListTest {
     }
 
     @Test
-    void shouldReturnSizeForNonEmpty() {
+    void test_returnSizeForNonEmpty() {
         LinkedList<String> list = new LinkedList<>();
         list.appendToTail("a");
         list.appendToTail("b");
@@ -82,20 +86,20 @@ class LinkedListTest {
     }
 
     @Test
-    void shouldReturnTrueForEmpty() {
+    void test_returnTrueForEmpty() {
         LinkedList<String> list = new LinkedList<>();
         assertTrue(list.isEmpty());
     }
 
     @Test
-    void shouldReturnFalseForNonEmpty() {
+    void test_returnFalseForNonEmpty() {
         LinkedList<String> list = new LinkedList<>();
         list.appendToTail("a");
         assertFalse(list.isEmpty());
     }
 
     @Test
-    void shouldThrowExceptionOnElementNotFound() {
+    void test_throwExceptionOnElementNotFound() {
         LinkedList<String> list = new LinkedList<>();
         list.appendToTail("a");
         list.appendToTail("b");
@@ -109,13 +113,13 @@ class LinkedListTest {
     }
 
     @Test
-    void shouldThrowExceptionOnNullArgumentForAppendOperation() {
+    void test_throwExceptionOnNullArgumentForAppendOperation() {
         LinkedList<Integer> list = new LinkedList<>();
         assertThrows(IllegalArgumentException.class, () -> list.appendToTail(null));
     }
 
     @Test
-    void shouldThrowExceptionOnNullArgumentForRemoveOperation() {
+    void test_throwExceptionOnNullArgumentForRemoveOperation() {
         LinkedList<Integer> list = new LinkedList<>();
         assertThrows(IllegalArgumentException.class, () -> list.remove(null));
     }

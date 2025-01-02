@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class BinaryTreeTest {
+class BinarySearchTreeTest {
 
     // to test console output
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -31,7 +31,7 @@ class BinaryTreeTest {
 
     @Test
     void test_addMultiple() {
-        BinaryTree tree = new BinaryTree();
+        BinaryTree tree = new BinarySearchTree();
         tree.addMultiple(5, 3, 7, 8, 2);
 
         assertEquals(5, tree.getRoot().getData());
@@ -39,20 +39,20 @@ class BinaryTreeTest {
         assertEquals(3, tree.getRoot().getLeft().getData());
         assertEquals(7, tree.getRoot().getRight().getData());
 
-        assertEquals(8, tree.getRoot().getLeft().getLeft().getData());
-        assertEquals(2, tree.getRoot().getLeft().getRight().getData());
+        assertEquals(2, tree.getRoot().getLeft().getLeft().getData());
+        assertNull(tree.getRoot().getLeft().getRight());
         assertNull(tree.getRoot().getRight().getLeft());
-        assertNull(tree.getRoot().getRight().getRight());
+        assertEquals(8, tree.getRoot().getRight().getRight().getData());
 
         assertNull(tree.getRoot().getLeft().getLeft().getLeft());
         assertNull(tree.getRoot().getLeft().getLeft().getRight());
-        assertNull(tree.getRoot().getLeft().getRight().getLeft());
-        assertNull(tree.getRoot().getLeft().getRight().getRight());
+        assertNull(tree.getRoot().getRight().getRight().getLeft());
+        assertNull(tree.getRoot().getRight().getRight().getRight());
     }
 
     @Test
     void test_add() {
-        BinaryTree tree = new BinaryTree();
+        BinaryTree tree = new BinarySearchTree();
         tree.add(5);
         tree.add(3);
         tree.add(7);
@@ -64,15 +64,55 @@ class BinaryTreeTest {
         assertEquals(3, tree.getRoot().getLeft().getData());
         assertEquals(7, tree.getRoot().getRight().getData());
 
-        assertEquals(8, tree.getRoot().getLeft().getLeft().getData());
-        assertEquals(2, tree.getRoot().getLeft().getRight().getData());
+        assertEquals(2, tree.getRoot().getLeft().getLeft().getData());
+        assertNull(tree.getRoot().getLeft().getRight());
         assertNull(tree.getRoot().getRight().getLeft());
-        assertNull(tree.getRoot().getRight().getRight());
+        assertEquals(8, tree.getRoot().getRight().getRight().getData());
 
         assertNull(tree.getRoot().getLeft().getLeft().getLeft());
         assertNull(tree.getRoot().getLeft().getLeft().getRight());
-        assertNull(tree.getRoot().getLeft().getRight().getLeft());
-        assertNull(tree.getRoot().getLeft().getRight().getRight());
+        assertNull(tree.getRoot().getRight().getRight().getLeft());
+        assertNull(tree.getRoot().getRight().getRight().getRight());
+    }
+
+    @Test
+    void test_contains() {
+        BinarySearchTree tree = buildTree();
+        assertTrue(tree.contains(3));
+        assertTrue(tree.contains(5));
+        assertTrue(tree.contains(7));
+        assertTrue(tree.contains(8));
+        assertTrue(tree.contains(11));
+        assertTrue(tree.contains(13));
+        assertTrue(tree.contains(14));
+        assertTrue(tree.contains(22));
+        assertFalse(tree.contains(0));
+        assertFalse(tree.contains(12));
+        assertFalse(tree.contains(-1));
+    }
+
+    @Test
+    void test_traversePreOrderDFS() {
+        String expected = "8 7 3 5 11 14 13 22 ";
+        BinaryTree tree = buildTree();
+        tree.traversePreOrderDFS(tree.getRoot());
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    void test_traverseInOrderDFS() {
+        String expected = "3 5 7 8 11 13 14 22 ";
+        BinaryTree tree = buildTree();
+        tree.traverseInOrderDFS(tree.getRoot());
+        assertEquals(expected, outContent.toString());
+    }
+
+    @Test
+    void test_traversePostOrderDFS() {
+        String expected = "5 3 7 13 22 14 11 8 ";
+        BinaryTree tree = buildTree();
+        tree.traversePostOrderDFS(tree.getRoot());
+        assertEquals(expected, outContent.toString());
     }
 
     @Test
@@ -92,110 +132,12 @@ class BinaryTreeTest {
     }
 
     @Test
-    void test_size() {
-        BinaryTree tree = buildTree();
-        assertEquals(8, tree.size());
-    }
-
-    @Test
-    void test_empty() {
-        BinaryTree tree = new BinaryTree();
-        assertTrue(tree.isEmpty());
-        tree.add(2);
-        assertFalse(tree.isEmpty());
-    }
-
-    @Test
-    void test_level() {
-        BinaryTree tree = new BinaryTree();
-        assertEquals(0, tree.getLevel());
-        tree.add(8);
-        assertEquals(1, tree.getLevel());
-        tree.add(11);
-        assertEquals(2, tree.getLevel());
-        tree.add(7);
-        assertEquals(2, tree.getLevel());
-        tree.add(14);
-        assertEquals(3, tree.getLevel());
-        tree.add(22);
-        assertEquals(3, tree.getLevel());
-        tree.add(13);
-        assertEquals(3, tree.getLevel());
-        tree.add(3);
-        assertEquals(3, tree.getLevel());
-        tree.add(5);
-        assertEquals(4, tree.getLevel());
-    }
-
-    @Test
-    void test_depth() {
-        BinaryTree tree = new BinaryTree();
-        assertEquals(0, tree.getDepth());
-        tree.add(8);
-        assertEquals(0, tree.getDepth());
-        tree.add(11);
-        assertEquals(1, tree.getDepth());
-        tree.add(7);
-        assertEquals(1, tree.getDepth());
-        tree.add(14);
-        assertEquals(2, tree.getDepth());
-        tree.add(22);
-        assertEquals(2, tree.getDepth());
-        tree.add(13);
-        assertEquals(2, tree.getDepth());
-        tree.add(3);
-        assertEquals(2, tree.getDepth());
-        tree.add(5);
-        assertEquals(3, tree.getDepth());
-    }
-
-    @Test
-    void test_contains() {
-        BinaryTree tree = buildTree();
-        assertTrue(tree.contains(3));
-        assertTrue(tree.contains(5));
-        assertTrue(tree.contains(7));
-        assertTrue(tree.contains(8));
-        assertTrue(tree.contains(11));
-        assertTrue(tree.contains(13));
-        assertTrue(tree.contains(14));
-        assertTrue(tree.contains(22));
-        assertFalse(tree.contains(0));
-        assertFalse(tree.contains(12));
-        assertFalse(tree.contains(-1));
-    }
-
-    @Test
-    void test_traversePreOrderDFS() {
-        String expected = "8 11 14 5 22 7 13 3 ";
-        BinaryTree tree = buildTree();
-        tree.traversePreOrderDFS(tree.getRoot());
-        assertEquals(expected, outContent.toString());
-    }
-
-    @Test
-    void test_traverseInOrderDFS() {
-        String expected = "5 14 11 22 8 13 7 3 ";
-        BinaryTree tree = buildTree();
-        tree.traverseInOrderDFS(tree.getRoot());
-        assertEquals(expected, outContent.toString());
-    }
-
-    @Test
-    void test_traversePostOrderDFS() {
-        String expected = "5 14 22 11 13 3 7 8 ";
-        BinaryTree tree = buildTree();
-        tree.traversePostOrderDFS(tree.getRoot());
-        assertEquals(expected, outContent.toString());
-    }
-
-    @Test
     void test_toString() {
         String expected = "" +
                 "               8               \n" +
-                "       11              7       \n" +
-                "   14      22      13      3   \n" +
-                " 5                      \n" +
+                "       7              11       \n" +
+                "   3                    14   \n" +
+                "    5              13  22 \n" +
                 "                \n";
         BinaryTree tree = buildTree();
         assertEquals(expected, tree.toString());
@@ -203,8 +145,8 @@ class BinaryTreeTest {
 
     @Test
     void test_remove_notFound() {
-        String expected = "5 14 11 22 8 13 7 3 \n" +
-                "5 14 11 22 8 13 7 3 \n";
+        String expected = "3 5 7 8 11 13 14 22 \n" +
+                "3 5 7 8 11 13 14 22 \n";
         BinaryTree tree = buildTree();
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
@@ -221,9 +163,9 @@ class BinaryTreeTest {
 
     @Test
     void test_remove_root() {
-        String expected = "5 14 11 22 8 13 7 3 \n" +
-                "14 11 22 5 13 7 3 \n" +
-                "14 11 22 3 13 7 \n";
+        String expected = "3 5 7 8 11 13 14 22 \n" +
+                "3 5 7 11 13 14 22 \n" +
+                "3 5 7 13 14 22 \n";
         BinaryTree tree = buildTree();
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
@@ -234,8 +176,8 @@ class BinaryTreeTest {
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
 
-        tree.remove(5);
-        assertFalse(tree.contains(5));
+        tree.remove(11);
+        assertFalse(tree.contains(11));
         assertEquals(6, tree.size());
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
@@ -245,11 +187,9 @@ class BinaryTreeTest {
 
     @Test
     void test_remove_nonLeaves() {
-        String expected = "5 14 11 22 8 13 7 3 \n" +
-                "14 11 22 8 13 5 3 \n" +
-                "14 11 3 8 13 5 \n" +
-                "13 11 3 8 5 \n" +
-                "13 3 8 5 \n";
+        String expected = "3 5 7 8 11 13 14 22 \n" +
+                "3 5 8 11 13 14 22 \n" +
+                "3 5 8 11 13 22 \n";
         BinaryTree tree = buildTree();
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
@@ -261,23 +201,10 @@ class BinaryTreeTest {
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
 
-        tree.remove(22);
-        assertFalse(tree.contains(22));
-        assertEquals(6, tree.size());
-
-        tree.traverseInOrderDFS(tree.getRoot());
-        System.out.println();
-
         tree.remove(14);
         assertFalse(tree.contains(14));
-        assertEquals(5, tree.size());
+        assertEquals(6, tree.size());
 
-        tree.traverseInOrderDFS(tree.getRoot());
-        System.out.println();
-
-        tree.remove(11);
-        assertFalse(tree.contains(11));
-        assertEquals(4, tree.size());
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
 
@@ -286,10 +213,10 @@ class BinaryTreeTest {
 
     @Test
     void test_remove_leaves() {
-        String expected = "5 14 11 22 8 13 7 3 \n" +
-                "14 11 22 8 13 7 3 \n" +
-                "14 11 3 8 13 7 \n" +
-                "14 11 3 8 7 \n";
+        String expected = "3 5 7 8 11 13 14 22 \n" +
+                "3 7 8 11 13 14 22 \n" +
+                "3 7 8 11 13 14 \n" +
+                "3 7 8 11 14 \n";
         BinaryTree tree = buildTree();
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
@@ -320,22 +247,22 @@ class BinaryTreeTest {
 
     @Test
     void test_remove_deepestRightmost() {
-        String expected = "5 14 11 22 8 13 7 3 \n" +
-                "14 11 22 8 13 7 3 \n" +
-                "14 11 22 8 13 7 \n";
+        String expected = "3 5 7 8 11 13 14 22 \n" +
+                "3 5 7 8 11 13 14 \n" +
+                "3 5 7 8 11 14 \n";
         BinaryTree tree = buildTree();
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
 
-        tree.remove(5);
-        assertFalse(tree.contains(5));
+        tree.remove(22);
+        assertFalse(tree.contains(22));
         assertEquals(7, tree.size());
 
         tree.traverseInOrderDFS(tree.getRoot());
         System.out.println();
 
-        tree.remove(3);
-        assertFalse(tree.contains(3));
+        tree.remove(13);
+        assertFalse(tree.contains(13));
         assertEquals(6, tree.size());
 
         tree.traverseInOrderDFS(tree.getRoot());
@@ -344,14 +271,15 @@ class BinaryTreeTest {
         assertEquals(expected, outContent.toString());
     }
 
+
     /*
                    8
-           11              7
-       14      22      13      3
-     5
+           7              11
+       3                    14
+        5              13  22
      */
-    private BinaryTree buildTree() {
-        BinaryTree tree = new BinaryTree();
+    private BinarySearchTree buildTree() {
+        BinarySearchTree tree = new BinarySearchTree();
         tree.addMultiple(8, 11, 7, 14, 22, 13, 3, 5);
         return tree;
     }

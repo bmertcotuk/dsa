@@ -16,7 +16,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class OtherAlgorithmsTest {
@@ -64,35 +66,35 @@ class OtherAlgorithmsTest {
     private OtherAlgorithms otherAlgorithms;
 
     @BeforeEach
-    public void setUpStreams() {
+    void setUpStreams() {
         System.setOut(new PrintStream(outContent));
     }
 
     @AfterEach
-    public void restoreStreams() {
+    void restoreStreams() {
         System.setOut(originalOut);
     }
 
     @ParameterizedTest
     @MethodSource("fibonacciData")
-    void shouldCalculateFibonacciNumbersRecursively(int input, int output) {
+    void test_calculateFibonacciNumbersRecursively(int input, int output) {
         assertEquals(output, otherAlgorithms.nthFibonacciRecursive(input));
     }
 
     @ParameterizedTest
     @MethodSource("fibonacciData")
-    void shouldCalculateFibonacciNumbersTopDownDP(int input, int output) {
+    void test_calculateFibonacciNumbersTopDownDP(int input, int output) {
         assertEquals(output, otherAlgorithms.nthFibonacciTopDownDP(input));
     }
 
     @ParameterizedTest
     @MethodSource("fibonacciData")
-    void shouldCalculateFibonacciNumbersBottomUpDP(int input, int output) {
+    void test_calculateFibonacciNumbersBottomUpDP(int input, int output) {
         assertEquals(output, otherAlgorithms.nthFibonacciBottomUpDP(input));
     }
 
     @Test
-    void shouldPrintPermutationsOfString() {
+    void test_printPermutationsOfString() {
         String expected = "ABC\n" +
                 "ACB\n" +
                 "BAC\n" +
@@ -106,18 +108,18 @@ class OtherAlgorithmsTest {
 
     @ParameterizedTest
     @MethodSource("primeData")
-    void shouldCheckPrimeNumbersIteratively(int input, boolean output) {
+    void test_checkPrimeNumbersIteratively(int input, boolean output) {
         assertEquals(output, otherAlgorithms.isPrimeIterative(input));
     }
 
     @ParameterizedTest
     @MethodSource("primeData")
-    void shouldCheckPrimeNumbersRecursively(int input, boolean output) {
+    void test_checkPrimeNumbersRecursively(int input, boolean output) {
         assertEquals(output, otherAlgorithms.isPrimeRecursive(input));
     }
 
     @Test
-    void shouldSumDigitsIteratively() {
+    void test_sumDigitsIteratively() {
         assertEquals(15, otherAlgorithms.sumDigitsIterative(54321));
         assertEquals(44, otherAlgorithms.sumDigitsIterative(99998));
         assertEquals(0, otherAlgorithms.sumDigitsIterative(0));
@@ -125,7 +127,7 @@ class OtherAlgorithmsTest {
     }
 
     @Test
-    void shouldSumDigitsRecursively() {
+    void test_sumDigitsRecursively() {
         assertEquals(15, otherAlgorithms.sumDigitsRecursive(54321));
         assertEquals(44, otherAlgorithms.sumDigitsRecursive(99998));
         assertEquals(0, otherAlgorithms.sumDigitsRecursive(0));
@@ -133,7 +135,7 @@ class OtherAlgorithmsTest {
     }
 
     @Test
-    void shouldPrintPowersOf2UntilN() {
+    void test_printPowersOf2UntilN() {
         String expected = "1\n" +
                 "2\n" +
                 "4\n" +
@@ -148,8 +150,8 @@ class OtherAlgorithmsTest {
     }
 
     @Test
-    void shouldPrintAllSortedPermutationsInTheAlphabetOfLength() {
-        otherAlgorithms.printAllSortedPermutationsInTheAlphabetOfLength( 3,"");
+    void test_printAllSortedPermutationsInTheAlphabetOfLength() {
+        otherAlgorithms.printAllSortedPermutationsInTheAlphabetOfLength(3, "");
         String expected = "abc\n" +
                 "abd\n" +
                 "abe\n" +
@@ -165,59 +167,59 @@ class OtherAlgorithmsTest {
     }
 
     @Test
-    void shouldPrintAllPositiveIntegerSolutionsToCubicEquation() {
+    void test_printAllPositiveIntegerSolutionsToCubicEquation() {
         otherAlgorithms.printAllPositiveIntegerSolutionsToCubicEquation(5);
-        String expected = "Pair1(4, 4) - Pair2(4, 4)\n" +
-                "Pair1(1, 4) - Pair2(1, 4)\n" +
-                "Pair1(1, 4) - Pair2(4, 1)\n" +
-                "Pair1(4, 1) - Pair2(1, 4)\n" +
-                "Pair1(4, 1) - Pair2(4, 1)\n" +
-                "Pair1(1, 1) - Pair2(1, 1)\n" +
-                "Pair1(2, 3) - Pair2(2, 3)\n" +
-                "Pair1(2, 3) - Pair2(3, 2)\n" +
-                "Pair1(3, 2) - Pair2(2, 3)\n" +
-                "Pair1(3, 2) - Pair2(3, 2)\n" +
-                "Pair1(2, 5) - Pair2(2, 5)\n" +
-                "Pair1(2, 5) - Pair2(5, 2)\n" +
-                "Pair1(5, 2) - Pair2(2, 5)\n" +
-                "Pair1(5, 2) - Pair2(5, 2)\n" +
-                "Pair1(2, 4) - Pair2(2, 4)\n" +
-                "Pair1(2, 4) - Pair2(4, 2)\n" +
-                "Pair1(4, 2) - Pair2(2, 4)\n" +
-                "Pair1(4, 2) - Pair2(4, 2)\n" +
-                "Pair1(1, 2) - Pair2(1, 2)\n" +
-                "Pair1(1, 2) - Pair2(2, 1)\n" +
-                "Pair1(2, 1) - Pair2(1, 2)\n" +
-                "Pair1(2, 1) - Pair2(2, 1)\n" +
-                "Pair1(2, 2) - Pair2(2, 2)\n" +
-                "Pair1(3, 3) - Pair2(3, 3)\n" +
-                "Pair1(3, 5) - Pair2(3, 5)\n" +
-                "Pair1(3, 5) - Pair2(5, 3)\n" +
-                "Pair1(5, 3) - Pair2(3, 5)\n" +
-                "Pair1(5, 3) - Pair2(5, 3)\n" +
-                "Pair1(5, 5) - Pair2(5, 5)\n" +
-                "Pair1(3, 4) - Pair2(3, 4)\n" +
-                "Pair1(3, 4) - Pair2(4, 3)\n" +
-                "Pair1(4, 3) - Pair2(3, 4)\n" +
-                "Pair1(4, 3) - Pair2(4, 3)\n" +
-                "Pair1(1, 3) - Pair2(1, 3)\n" +
-                "Pair1(1, 3) - Pair2(3, 1)\n" +
-                "Pair1(3, 1) - Pair2(1, 3)\n" +
-                "Pair1(3, 1) - Pair2(3, 1)\n" +
-                "Pair1(4, 5) - Pair2(4, 5)\n" +
-                "Pair1(4, 5) - Pair2(5, 4)\n" +
-                "Pair1(5, 4) - Pair2(4, 5)\n" +
-                "Pair1(5, 4) - Pair2(5, 4)\n" +
-                "Pair1(1, 5) - Pair2(1, 5)\n" +
-                "Pair1(1, 5) - Pair2(5, 1)\n" +
-                "Pair1(5, 1) - Pair2(1, 5)\n" +
-                "Pair1(5, 1) - Pair2(5, 1)\n";
+        String expected = "Pair1(4,4) - Pair2(4,4)\n" +
+                "Pair1(1,4) - Pair2(1,4)\n" +
+                "Pair1(1,4) - Pair2(4,1)\n" +
+                "Pair1(4,1) - Pair2(1,4)\n" +
+                "Pair1(4,1) - Pair2(4,1)\n" +
+                "Pair1(1,1) - Pair2(1,1)\n" +
+                "Pair1(2,3) - Pair2(2,3)\n" +
+                "Pair1(2,3) - Pair2(3,2)\n" +
+                "Pair1(3,2) - Pair2(2,3)\n" +
+                "Pair1(3,2) - Pair2(3,2)\n" +
+                "Pair1(2,5) - Pair2(2,5)\n" +
+                "Pair1(2,5) - Pair2(5,2)\n" +
+                "Pair1(5,2) - Pair2(2,5)\n" +
+                "Pair1(5,2) - Pair2(5,2)\n" +
+                "Pair1(2,4) - Pair2(2,4)\n" +
+                "Pair1(2,4) - Pair2(4,2)\n" +
+                "Pair1(4,2) - Pair2(2,4)\n" +
+                "Pair1(4,2) - Pair2(4,2)\n" +
+                "Pair1(1,2) - Pair2(1,2)\n" +
+                "Pair1(1,2) - Pair2(2,1)\n" +
+                "Pair1(2,1) - Pair2(1,2)\n" +
+                "Pair1(2,1) - Pair2(2,1)\n" +
+                "Pair1(2,2) - Pair2(2,2)\n" +
+                "Pair1(3,3) - Pair2(3,3)\n" +
+                "Pair1(3,5) - Pair2(3,5)\n" +
+                "Pair1(3,5) - Pair2(5,3)\n" +
+                "Pair1(5,3) - Pair2(3,5)\n" +
+                "Pair1(5,3) - Pair2(5,3)\n" +
+                "Pair1(5,5) - Pair2(5,5)\n" +
+                "Pair1(3,4) - Pair2(3,4)\n" +
+                "Pair1(3,4) - Pair2(4,3)\n" +
+                "Pair1(4,3) - Pair2(3,4)\n" +
+                "Pair1(4,3) - Pair2(4,3)\n" +
+                "Pair1(1,3) - Pair2(1,3)\n" +
+                "Pair1(1,3) - Pair2(3,1)\n" +
+                "Pair1(3,1) - Pair2(1,3)\n" +
+                "Pair1(3,1) - Pair2(3,1)\n" +
+                "Pair1(4,5) - Pair2(4,5)\n" +
+                "Pair1(4,5) - Pair2(5,4)\n" +
+                "Pair1(5,4) - Pair2(4,5)\n" +
+                "Pair1(5,4) - Pair2(5,4)\n" +
+                "Pair1(1,5) - Pair2(1,5)\n" +
+                "Pair1(1,5) - Pair2(5,1)\n" +
+                "Pair1(5,1) - Pair2(1,5)\n" +
+                "Pair1(5,1) - Pair2(5,1)\n";
         String actual = outContent.toString();
         assertEquals(expected, actual);
     }
 
     @Test
-    void shouldFindTheNumberOfElementsInCommon() {
+    void test_findTheNumberOfElementsInCommon() {
         int[] array1 = {1, 2, 3};
         int[] array2 = {1, 2, 3};
         assertEquals(3, otherAlgorithms.findTheNumberOfElementsInCommon(array1, array2));
@@ -239,14 +241,14 @@ class OtherAlgorithmsTest {
     }
 
     @Test
-    void shouldRearrangeArrayWithRunnerTechnique() {
+    void test_rearrangeArrayWithRunnerTechnique() {
         int[] input = new int[]{1, 2, 3, 4, 5, 6};
         int[] expected = new int[]{1, 4, 2, 5, 3, 6};
         assertArrayEquals(expected, otherAlgorithms.rearrangeArrayWithRunnerTechnique(input));
     }
 
     @Test
-    void shouldNotRearrangeSmallOrEmptyArrayWithRunnerTechnique() {
+    void test_notRearrangeSmallOrEmptyArrayWithRunnerTechnique() {
         int[] input1 = new int[]{1, 2};
         assertArrayEquals(input1, otherAlgorithms.rearrangeArrayWithRunnerTechnique(input1));
         int[] input2 = new int[]{};
@@ -254,15 +256,15 @@ class OtherAlgorithmsTest {
     }
 
     @Test
-    void shouldThrowExceptionIfArraySizeIsNotEven() {
+    void test_throwExceptionIfArraySizeIsNotEven() {
         int[] input = new int[]{1, 2, 3};
         assertThrows(IllegalArgumentException.class, () -> otherAlgorithms.rearrangeArrayWithRunnerTechnique(input));
         int[] input2 = new int[]{1};
-        assertThrows(IllegalArgumentException.class, () -> otherAlgorithms.rearrangeArrayWithRunnerTechnique(input));
+        assertThrows(IllegalArgumentException.class, () -> otherAlgorithms.rearrangeArrayWithRunnerTechnique(input2));
     }
 
     @Test
-    void shouldRearrangeLinkedListWithRunnerTechnique() {
+    void test_rearrangeLinkedListWithRunnerTechnique() {
         LinkedList<Integer> list = new LinkedList<>();
         list.appendToTail(0);
         list.appendToTail(1);
@@ -293,13 +295,13 @@ class OtherAlgorithmsTest {
     }
 
     @Test
-    void shouldNotRearrangeSmallOrEmptyListWithRunnerTechnique() {
+    void test_notRearrangeSmallOrEmptyListWithRunnerTechnique() {
         LinkedList<Integer> list = new LinkedList<>();
         assertEquals(list, otherAlgorithms.rearrangeLinkedListWithRunnerTechnique(list));
     }
 
     @Test
-    void shouldThrowExceptionIfListSizeIsNotEven() {
+    void test_throwExceptionIfListSizeIsNotEven() {
         LinkedList<Integer> list = new LinkedList<>();
         list.appendToTail(0);
         assertThrows(IllegalArgumentException.class,
@@ -308,5 +310,12 @@ class OtherAlgorithmsTest {
         list.appendToTail(2);
         assertThrows(IllegalArgumentException.class,
                 () -> otherAlgorithms.rearrangeLinkedListWithRunnerTechnique(list));
+    }
+
+    @Test
+    void test_generateAllPrimesUntilMax() {
+        assertArrayEquals(
+                new boolean[]{false, false, true, true, false, true, false, true, false, false, false, true, false, true, false}, // 2, 3, 5, 7, 11, 13
+                otherAlgorithms.sieveOfEratosthenes(14));
     }
 }

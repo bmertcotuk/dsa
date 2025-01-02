@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class StringBuilderTest {
 
     @Test
-    void shouldReturnEmptyString() {
+    void test_returnEmptyString() {
         StringBuilder builder = new StringBuilder();
         assertEquals("", builder.toString());
     }
 
     @Test
-    void shouldAppendRepeated() {
+    void test_appendRepeated() {
         StringBuilder builder = new StringBuilder();
         builder.appendRepeated("-", 3);
         builder.appendRepeated("a", 4);
@@ -23,7 +23,7 @@ class StringBuilderTest {
     }
 
     @Test
-    void shouldReturnBuiltString() {
+    void test_returnBuiltString() {
         StringBuilder builder = new StringBuilder();
         builder.append("abc");
         builder.append("def");
@@ -32,7 +32,7 @@ class StringBuilderTest {
     }
 
     @Test
-    void shouldReturnBuiltStringLargerThanInitialCapacity() {
+    void test_returnBuiltStringLargerThanInitialCapacity() {
         StringBuilder builder = new StringBuilder();
         builder.append("abc");
         builder.append("def");
@@ -42,7 +42,7 @@ class StringBuilderTest {
     }
 
     @Test
-    void shouldThrowExceptionOnNullArgumentForAppendOperation() {
+    void test_throwExceptionOnNullArgumentForAppendOperation() {
         StringBuilder builder = new StringBuilder();
         assertThrows(IllegalArgumentException.class, () -> builder.append(null));
     }

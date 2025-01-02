@@ -4,18 +4,21 @@ import org.junit.jupiter.api.Test;
 
 import java.util.EmptyStackException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StackTest {
 
     @Test
-    void shouldReturnSizeForEmptyStack() {
+    void test_returnSizeForEmptyStack() {
         Stack<Integer> stack = new Stack<>();
         assertEquals(0, stack.size());
     }
 
     @Test
-    void shouldReturnSizeForNonEmptyStack() {
+    void test_returnSizeForNonEmptyStack() {
         Stack<Integer> stack = new Stack<>();
         stack.push(2);
         stack.push(4);
@@ -24,26 +27,26 @@ class StackTest {
     }
 
     @Test
-    void shouldReturnTrueForEmptyStack() {
+    void test_returnTrueForEmptyStack() {
         Stack<Integer> stack = new Stack<>();
         assertTrue(stack.isEmpty());
     }
 
     @Test
-    void shouldReturnFalseForNonEmptyStack() {
+    void test_returnFalseForNonEmptyStack() {
         Stack<Integer> stack = new Stack<>();
         stack.push(2);
         assertFalse(stack.isEmpty());
     }
 
     @Test
-    void shouldPushElements() {
+    void test_pushElements() {
         Stack<Integer> stack = createNonEmptyStack();
         assertEquals(4, stack.size());
     }
 
     @Test
-    void shouldPopElements() {
+    void test_popElements() {
         Stack<Integer> stack = createNonEmptyStack();
         assertEquals(8, stack.pop());
         assertEquals(6, stack.pop());
@@ -57,21 +60,21 @@ class StackTest {
     }
 
     @Test
-    void shouldPeekElement() {
+    void test_peekElement() {
         Stack<Integer> stack = createNonEmptyStack();
         assertEquals(8, stack.peek());
     }
 
     @Test
-    void shouldThrowExceptionOnEmptyStackForPopOperation() {
+    void test_throwExceptionOnEmptyStackForPopOperation() {
         Stack<Integer> stack = new Stack<>();
-        assertThrows(EmptyStackException.class, () -> stack.pop());
+        assertThrows(EmptyStackException.class, stack::pop);
     }
 
     @Test
-    void shouldThrowExceptionOnEmptyStackForPeekOperation() {
+    void test_throwExceptionOnEmptyStackForPeekOperation() {
         Stack<Integer> stack = new Stack<>();
-        assertThrows(EmptyStackException.class, () -> stack.peek());
+        assertThrows(EmptyStackException.class, stack::peek);
     }
 
     private Stack<Integer> createNonEmptyStack() {

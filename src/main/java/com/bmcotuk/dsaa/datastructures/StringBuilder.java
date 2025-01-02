@@ -21,9 +21,7 @@ public class StringBuilder {
         if (s == null) {
             throw new IllegalArgumentException();
         }
-        ensureCapacity();
-        char[] anotherArray = s.toCharArray();
-        for (char c : anotherArray) {
+        for (char c : s.toCharArray()) {
             add(c);
         }
     }
@@ -41,7 +39,7 @@ public class StringBuilder {
 
     public String toString() {
         // no better way without copying exists, even Java does the same
-        return String.valueOf(Arrays.copyOfRange(array, 0, size));
+        return new String(Arrays.copyOfRange(array, 0, size));
     }
 
     private void ensureCapacity() {

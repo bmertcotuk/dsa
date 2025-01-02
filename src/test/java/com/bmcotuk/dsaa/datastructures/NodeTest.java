@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class NodeTest {
 
     @Test
-    void shouldModifyTheMainNodeThroughReferenceNode() {
+    void test_modifyTheMainNodeThroughReferenceNode() {
         Node<Integer> mainNode = new Node<>(3);
         mainNode.setNext(new Node<>(5));
 
@@ -17,8 +17,8 @@ class NodeTest {
         referenceNode = referenceNode.getNext();
         referenceNode.setData(55);
 
-        assertEquals(new Node(33), mainNode);
-        assertEquals(new Node(55), mainNode.getNext());
+        assertEquals(new Node<>(33), mainNode);
+        assertEquals(new Node<>(55), mainNode.getNext());
         assertEquals(mainNode.getNext(), referenceNode);
     }
 }

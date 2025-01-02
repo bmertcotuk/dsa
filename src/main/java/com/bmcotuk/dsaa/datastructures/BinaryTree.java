@@ -2,15 +2,19 @@ package com.bmcotuk.dsaa.datastructures;
 
 import com.bmcotuk.dsaa.common.BinaryTreeNode;
 
-/**
- * @author Mert Cotuk
- */
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+@SuppressWarnings("java:S106")
 public class BinaryTree {
 
-    private BinaryTreeNode root;
-    private int size;
+    BinaryTreeNode root;
+    int size;
 
     public BinaryTree() {
+        size = 0;
     }
 
     public BinaryTreeNode getRoot() {
@@ -21,95 +25,274 @@ public class BinaryTree {
         root = new BinaryTreeNode(data);
     }
 
+    public int size() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
     public void addMultiple(int... multiple) {
         for (int data : multiple) {
             add(data);
         }
     }
 
+    /**
+     * time: O(n)
+     * space: O(n)
+     */
     public void add(int data) {
-        root = addRecursion(root, data);
-    }
-
-    // assigning and returning solves "pass by value" issues
-    private BinaryTreeNode addRecursion(BinaryTreeNode node, int data) {
-        if (node == null) {
-            node = new BinaryTreeNode(data);
+        BinaryTreeNode newNode = new BinaryTreeNode(data);
+        if (root == null) {
+            root = newNode;
             size++;
         } else {
-            if (data <= node.getData()) {
-                node.setLeft(addRecursion(node.getLeft(), data));
-            } else {
-                node.setRight(addRecursion(node.getRight(), data));
+            // use BFS (leve-order traversal)
+            Queue<BinaryTreeNode> queue = new LinkedList<>(); // best implementation of queue interface for this
+            queue.offer(root); // better than .add() in capacity restricted queue
+
+            while (!queue.isEmpty()) {
+                BinaryTreeNode currentNode = queue.poll();
+
+                if (currentNode.getLeft() == null) {
+                    currentNode.setLeft(newNode);
+                    size++;
+                    return;
+                } else { // no return here to check its children
+                    queue.offer(currentNode.getLeft());
+                }
+
+                if (currentNode.getRight() == null) {
+                    currentNode.setRight(newNode);
+                    size++;
+                    return;
+                } else {  // no return here to check its children
+                    queue.offer(currentNode.getRight());
+                }
             }
         }
-        return node;
     }
 
+    /**
+     * time: O(n)
+     * space: O(n)
+     */
     public boolean contains(int data) {
-        return containsRecursion(root, data);
-    }
 
-    // always have a clear "else" block to avoid "missing return statement"
-    private boolean containsRecursion(BinaryTreeNode node, int data) {
-        if (node == null) {
+        if (root == null) { // no need to create Queue
             return false;
-        } else {
-            if (data < node.getData()) {
-                return containsRecursion(node.getLeft(), data);
-            } else if (data > node.getData()) {
-                return containsRecursion(node.getRight(), data);
-            } else {
+        }
+
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            BinaryTreeNode currentNode = queue.poll();
+
+            if (currentNode.getData() == data) {
                 return true;
             }
+
+            if (currentNode.getLeft() != null) {
+                queue.offer(currentNode.getLeft());
+            }
+
+            if (currentNode.getRight() != null) {
+                queue.offer(currentNode.getRight());
+            }
         }
+        return false;
     }
 
-    // we only use deepest node in order to maintain the balance of a binary tree
+    /**
+     * time: O(n)
+     * space: O(n)
+     */
     public void remove(int data) {
-        root = removeRecursion(root, data);
+
+        if (root == null) {
+            return;
+        }
+
+        BinaryTreeNode targetNode = null;
+        BinaryTreeNode lastNode = null;
+
+        // targetNode: assign node to be deleted
+        // lastNode: assign the last node in iteration
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            lastNode = queue.poll();
+
+            if (lastNode.getData() == data)
+                targetNode = lastNode;
+
+            if (lastNode.getLeft() != null)
+                queue.offer(lastNode.getLeft());
+
+            if (lastNode.getRight() != null)
+                queue.offer(lastNode.getRight());
+        }
+
+        // not found
+        if (targetNode == null) {
+            return;
+        }
+        // last node of the tree as a replacement value
+        targetNode.setData(lastNode.getData());
+        // remove last node - replacement node
+        removeLastNode(lastNode);
+        size--;
     }
 
-    private BinaryTreeNode removeRecursion(BinaryTreeNode node, int data) {
+    // we check by object reference, therefore, we know that we are deleting the correct node
+    private void removeLastNode(BinaryTreeNode lastNode) {
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            BinaryTreeNode currentNode = queue.poll();
+
+            if (currentNode.getLeft() != null) {
+                if (currentNode.getLeft() == lastNode) {
+                    currentNode.setLeft(null);
+                    return;
+                } else {
+                    queue.offer(currentNode.getLeft());
+                }
+            }
+
+            if (currentNode.getRight() != null) {
+                if (currentNode.getRight() == lastNode) {
+                    currentNode.setRight(null);
+                    return;
+                } else {
+                    queue.offer(currentNode.getRight());
+                }
+            }
+        }
+    }
+
+    /**
+     * Each node should have either 0 or 2 children.
+     * <p>
+     * time: O(n)
+     * space: O(n)
+     */
+    public boolean isFull() {
+        if (root == null) {
+            return true;
+        }
+
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            BinaryTreeNode current = queue.poll();
+            boolean hasLeft = current.getLeft() != null;
+            boolean hasRight = current.getRight() != null;
+
+            if (hasLeft ^ hasRight) { // XOR
+                return false;
+            }
+
+            if (hasLeft) queue.offer(current.getLeft());
+            if (hasRight) queue.offer(current.getRight());
+        }
+
+        return true;
+    }
+
+    /**
+     * Each level except the deepest level (leaves) should be full. Leaves should be filled from left to right.
+     * <p>
+     * time: O(n)
+     * space: O(n)
+     */
+    // TODO: Check from left to right case
+    public boolean isComplete() {
+        if (root == null) {
+            return true;
+        }
+
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        boolean hasNonFullNode = false;
+        while (!queue.isEmpty()) {
+            BinaryTreeNode current = queue.poll();
+
+            if (current.getLeft() != null) {
+                if (hasNonFullNode) {
+                    return false; // non-full node but it was not the leaf
+                }
+                queue.offer(current.getLeft());
+            } else {
+                hasNonFullNode = true; // found a non-full node
+            }
+
+            if (current.getRight() != null) {
+                if (hasNonFullNode) {
+                    return false; // non-full node but it was not the leaf
+                }
+                queue.offer(current.getRight());
+            } else {
+                hasNonFullNode = true; // found a non-full node
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Full, complete, and has exactly 2^level - 1 nodes
+     * <p>
+     * time: O(n)
+     * space: O(n)
+     */
+    public boolean isPerfect() {
+        if (root == null) {
+            return true;
+        }
+
+        int level = getLevel();
+        return isPerfectRecursion(root, level, 0);
+    }
+
+    private boolean isPerfectRecursion(BinaryTreeNode node, int depth, int level) {
         if (node == null) {
-            return null;
+            return true;
         }
 
-        // recursion will work like find, it will only touch the affected sub-tree and remove the value
-        if (data < node.getData()) {
-            node.setLeft(removeRecursion(node.getLeft(), data));
-            return node;
-        } else if (data > node.getData()) {
-            node.setRight(removeRecursion(node.getRight(), data));
-            return node;
-        } else {
-            // size should be decremented when nulling or setting, two children case is just a step for recursion
-            // has no child
-            if (node.getLeft() == null && node.getRight() == null) {
-                size--;
-                return null;
-            }
-            // has one child
-            if (node.getLeft() == null) {
-                size--;
-                return node.getRight();
-            }
-            if (node.getRight() == null) {
-                size--;
-                return node.getLeft();
-            }
-            // has two children
-            // smallest of the right sub-tree will replace the deleted node to keep the tree balanced
-            int replacementValue = findSmallestValue(node.getRight());
-            node.setData(replacementValue);
-            // we used the value, now we can delete it, last argument (data to be deleted) has changed!
-            node.setRight(removeRecursion(node.getRight(), replacementValue));
-            return node;
+        // check if leaf node is at the correct depth
+        if (node.getLeft() == null && node.getRight() == null) {
+            return depth == level + 1;
         }
+
+        // a node has only one child, it's not perfect
+        if (node.getLeft() == null || node.getRight() == null) {
+            return false;
+        }
+
+        // recursively check left and right subtrees.
+        return isPerfectRecursion(node.getLeft(), depth, level + 1)
+                && isPerfectRecursion(node.getRight(), depth, level + 1);
     }
 
-    private int findSmallestValue(BinaryTreeNode node) {
-        return node.getLeft() == null ? node.getData() : findSmallestValue(node.getLeft());
+    public boolean isBinarySearchTree() {
+        return isBinarySearchTreeRecursion(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    private boolean isBinarySearchTreeRecursion(BinaryTreeNode node, int min, int max) {
+        if (node == null) {
+            return true;
+        }
+
+        if (node.getData() <= min || node.getData() >= max) {
+            return false;
+        }
+
+        return isBinarySearchTreeRecursion(node.getLeft(), min, node.getData())
+                && isBinarySearchTreeRecursion(node.getRight(), node.getData(), max);
     }
 
     public void traversePreOrderDFS(BinaryTreeNode node) {
@@ -136,25 +319,6 @@ public class BinaryTree {
         }
     }
 
-    public void traverseLevelOrderBFS(BinaryTreeNode node) {
-        Queue<BinaryTreeNode> queue = new Queue<>();
-        if (node != null) {
-            queue.enqueue(node);
-        }
-        while (!queue.isEmpty()) {
-            BinaryTreeNode currentNode = queue.dequeue();
-            if (currentNode != null) {
-                System.out.print(currentNode.getData() + " ");
-                if (currentNode.getLeft() != null) {
-                    queue.enqueue(currentNode.getLeft());
-                }
-                if (currentNode.getRight() != null) {
-                    queue.enqueue(currentNode.getRight());
-                }
-            }
-        }
-    }
-
     public int getDepth() {
         return Math.max(getLevel() - 1, 0);
     }
@@ -163,178 +327,62 @@ public class BinaryTree {
         return maxLevelFromNode(root);
     }
 
-    public boolean isBalanced() {
-        return false;
-    }
-
-    // fully balanced
-    public boolean isPerfect() {
-        return isPerfect() && isFull();
-    }
-
-    public boolean isComplete() {
-        return false;
-    }
-
-    private boolean isCompleteBFS(BinaryTreeNode node) {
-
-        Queue<BinaryTreeNode> queue = new Queue<>();
-        if (node != null) {
-            queue.enqueue(node);
-        }
-        while (!queue.isEmpty()) {
-            BinaryTreeNode currentNode = queue.dequeue();
-
-            // between node
-            if (maxLevelFromNode(currentNode) > 2 && hasAnyNullChildren(currentNode)) {
-                return false;
-            }
-
-            // leaf's parent node
-            if (maxLevelFromNode(currentNode) == 2) {
-                return false;
-            }
-
-            if (currentNode.getLeft() != null) {
-                queue.enqueue(currentNode.getLeft());
-            }
-            if (currentNode.getRight() != null) {
-                queue.enqueue(currentNode.getRight());
-            }
-        }
-        return true;
-    }
-
-    private boolean hasAnyNullChildren(BinaryTreeNode node) {
-        return node.getLeft() == null || node.getRight() == null;
-    }
-
-    private boolean hasAllOrNoChildren(BinaryTreeNode node) {
-        return (node.getLeft() != null && node.getRight() != null) || (node.getLeft() == null && node.getRight() == null);
-    }
-
-    // uses BFS
-    public boolean isFull() {
-
-        Queue<BinaryTreeNode> queue = new Queue<>();
-        if (root != null) {
-            queue.enqueue(root);
-        }
-        while (!queue.isEmpty()) {
-            BinaryTreeNode currentNode = queue.dequeue();
-
-            if (!hasAllOrNoChildren(currentNode)) {
-                return false;
-            }
-
-            if (currentNode.getLeft() != null) {
-                queue.enqueue(currentNode.getLeft());
-            }
-            if (currentNode.getRight() != null) {
-                queue.enqueue(currentNode.getRight());
-            }
-        }
-        return true;
-    }
-
-    public boolean isBST() {
-        return false;
-    }
-
-    // TODO: restrict access
-    public int maxLevelFromNode(BinaryTreeNode node) {
+    int maxLevelFromNode(BinaryTreeNode node) {
         if (node == null) {
             return 0;
         }
-        return Math.max(maxLevelFromNode(node.getLeft()), maxLevelFromNode(node.getRight())) + 1;
+        return 1 + Math.max(maxLevelFromNode(node.getLeft()), maxLevelFromNode(node.getRight()));
     }
 
-    public int size() {
-        return size;
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    // BFS is not an option here, null nodes can be missed if tree is not balanced
-    // recursion starting from the root is the only option
-    // based on the solution here: https://stackoverflow.com/a/4973083/9300818
     @Override
     public String toString() {
-        int maxLevel = maxLevelFromNode(root);
-        ArrayList<BinaryTreeNode> nodes = new ArrayList<>();
-        nodes.add(root);
-
-        StringBuilder stringBuilder = new StringBuilder();
-        toStringRecursion(nodes, 1, maxLevel, stringBuilder);
-        return stringBuilder.toString();
-    }
-
-    private void toStringRecursion(ArrayList<BinaryTreeNode> nodes, int currentLevel, int maxLevel,
-                                   StringBuilder stringBuilder) {
-
-        if (nodes.isEmpty() || hasOnlyNullElements(nodes)) {
-            return;
+        if (root == null) {
+            return "";
         }
 
-        int currentDepth = maxLevel - currentLevel;
-        int edgeLines = (int) Math.pow(2, (Math.max(currentDepth - 1, 0)));
-        int leftmostSpaces = (int) Math.pow(2, currentDepth) - 1;
-        int betweenSpaces = (int) Math.pow(2, currentDepth + 1) - 1;
+        int maxLevel = getLevel();
+        int maxWidth = (int) Math.pow(2, maxLevel) - 1;
+        StringBuilder sb = new StringBuilder();
 
-        stringBuilder.appendRepeated(" ", leftmostSpaces);
-        ArrayList<BinaryTreeNode> newNodes = new ArrayList<>();
-        for (int i = 0; i < nodes.size(); i++) {
-            BinaryTreeNode currentNode = (BinaryTreeNode) nodes.get(i);
-            if (currentNode != null) {
-                stringBuilder.append(String.valueOf(currentNode.getData()));
-                newNodes.addWithoutNullCheck(currentNode.getLeft());
-                newNodes.addWithoutNullCheck(currentNode.getRight());
+        List<BinaryTreeNode> currentLevel = new ArrayList<>();
+        currentLevel.add(root);
+
+        for (int level = 0; level <= maxLevel; level++) {
+
+            List<BinaryTreeNode> nextLevel = new ArrayList<>();
+            sb.append(getLevelString(currentLevel, maxWidth));
+            sb.append("\n");
+
+            for (BinaryTreeNode node : currentLevel) {
+                if (node != null) {
+                    nextLevel.add(node.getLeft());
+                    nextLevel.add(node.getRight());
+                } else {
+                    nextLevel.add(null); // Placeholder for alignment
+                    nextLevel.add(null);
+                }
+            }
+            currentLevel = nextLevel;
+            maxWidth /= 2; // Reduce spacing for the next level
+        }
+
+        return sb.toString();
+    }
+
+    private String getLevelString(List<BinaryTreeNode> level, int width) {
+        int spacesBetween = width * 2 + 1;
+        StringBuilder line = new StringBuilder();
+
+        for (BinaryTreeNode node : level) {
+            line.append(" ".repeat(Math.max(0, spacesBetween / 2)));
+            if (node == null) {
+                line.append(" ");
             } else {
-                // we need these, they'll be checked on the next iteration at this condition
-                stringBuilder.append(" ");
-                newNodes.addWithoutNullCheck(null);
-                newNodes.addWithoutNullCheck(null);
+                line.append(String.valueOf(node.getData()));
             }
-            stringBuilder.appendRepeated(" ", betweenSpaces);
+            line.append(" ".repeat(Math.max(0, spacesBetween / 2)));
         }
-        stringBuilder.append("\n");
-        for (int i = 1; i <= edgeLines; i++) {
-            for (int j = 0; j < nodes.size(); j++) {
-                stringBuilder.appendRepeated(" ", leftmostSpaces - i);
 
-                BinaryTreeNode currentNode = (BinaryTreeNode) nodes.get(j);
-                if (currentNode == null) {
-                    stringBuilder.appendRepeated(" ", 2 * edgeLines + i + 1);
-                    continue;
-                }
-
-                if (currentNode.getLeft() != null) {
-                    stringBuilder.append("/");
-                } else {
-                    stringBuilder.append(" ");
-                }
-                stringBuilder.appendRepeated(" ", 2 * i - 1);
-
-                if (currentNode.getRight() != null) {
-                    stringBuilder.append("\\");
-                } else {
-                    stringBuilder.append(" ");
-                }
-                stringBuilder.appendRepeated(" ", 2 * edgeLines - i);
-            }
-            stringBuilder.append("\n");
-        }
-        toStringRecursion(newNodes, currentLevel + 1, maxLevel, stringBuilder);
-    }
-
-    private boolean hasOnlyNullElements(ArrayList<BinaryTreeNode> nodes) {
-        for (int i = 0; i < nodes.size(); i++) {
-            if (nodes.get(i) != null) {
-                return false;
-            }
-        }
-        return true;
+        return line.toString();
     }
 }

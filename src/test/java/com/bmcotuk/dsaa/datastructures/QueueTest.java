@@ -4,18 +4,21 @@ import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class QueueTest {
 
     @Test
-    void shouldReturnSizeForEmpty() {
+    void test_returnSizeForEmpty() {
         Queue<Integer> queue = new Queue<>();
         assertEquals(0, queue.size());
     }
 
     @Test
-    void shouldReturnSizeForNonEmpty() {
+    void test_returnSizeForNonEmpty() {
         Queue<Integer> queue = new Queue<>();
         queue.enqueue(3);
         queue.enqueue(5);
@@ -23,20 +26,20 @@ class QueueTest {
     }
 
     @Test
-    void shouldReturnTrueForEmpty() {
+    void test_returnTrueForEmpty() {
         Queue<Integer> queue = new Queue<>();
         assertTrue(queue.isEmpty());
     }
 
     @Test
-    void shouldReturnFalseForNonEmpty() {
+    void test_returnFalseForNonEmpty() {
         Queue<Integer> queue = new Queue<>();
         queue.enqueue(3);
         assertFalse(queue.isEmpty());
     }
 
     @Test
-    void shouldEnqueueAndDequeue() {
+    void test_enqueueAndDequeue() {
         Queue<Integer> queue = new Queue<>();
         queue.enqueue(3);
         queue.enqueue(5);
@@ -57,7 +60,7 @@ class QueueTest {
     }
 
     @Test
-    void shouldPeek() {
+    void test_peek() {
         Queue<Integer> queue = new Queue<>();
         queue.enqueue(3);
         queue.enqueue(5);
@@ -66,19 +69,19 @@ class QueueTest {
     }
 
     @Test
-    void shouldThrowExceptionOnNullArgumentForEnqueueOperation() {
+    void test_throwExceptionOnNullArgumentForEnqueueOperation() {
         Queue<Integer> queue = new Queue<>();
         assertThrows(IllegalArgumentException.class, () -> queue.enqueue(null));
     }
 
     @Test
-    void shouldThrowExceptionOnEmptyQueueForDequeueOperation() {
+    void test_throwExceptionOnEmptyQueueForDequeueOperation() {
         Queue<Integer> queue = new Queue<>();
         assertThrows(NoSuchElementException.class, () -> queue.dequeue());
     }
 
     @Test
-    void shouldThrowExceptionOnEmptyQueueForPeekOperation() {
+    void test_throwExceptionOnEmptyQueueForPeekOperation() {
         Queue<Integer> queue = new Queue<>();
         assertThrows(NoSuchElementException.class, () -> queue.peek());
     }

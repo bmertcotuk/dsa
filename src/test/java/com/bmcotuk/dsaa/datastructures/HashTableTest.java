@@ -4,36 +4,39 @@ import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HashTableTest {
 
     @Test
-    void shouldCreateEmptyHashTable() {
+    void test_createEmptyHashTable() {
         HashTable<String, Integer> hashTable = new HashTable<>();
         assertTrue(hashTable.isEmpty());
     }
 
     @Test
-    void shouldCreateNonEmptyHashTable() {
+    void test_createNonEmptyHashTable() {
         HashTable<String, Integer> hashTable = createNonEmptyHashTable();
         assertFalse(hashTable.isEmpty());
     }
 
     @Test
-    void shouldReturnSizeForEmpty() {
+    void test_returnSizeForEmpty() {
         HashTable<String, Integer> hashTable = new HashTable<>();
         assertEquals(0, hashTable.size());
     }
 
     @Test
-    void shouldReturnSizeForNonEmpty() {
+    void test_returnSizeForNonEmpty() {
         HashTable<String, Integer> hashTable = createNonEmptyHashTable();
         assertEquals(14, hashTable.size());
     }
 
     @Test
-    void shouldGetAllElements() {
+    void test_getAllElements() {
         HashTable<String, Integer> hashTable = createNonEmptyHashTable();
         assertEquals(1, hashTable.get("Manny"));
         assertEquals(2, hashTable.get("Joe"));
@@ -52,7 +55,7 @@ class HashTableTest {
     }
 
     @Test
-    void shouldReturnTrueForAllContainedElements() {
+    void test_returnTrueForAllContainedElements() {
         HashTable<String, Integer> hashTable = createNonEmptyHashTable();
         assertTrue(hashTable.containsKey("Manny"));
         assertTrue(hashTable.containsKey("Joe"));
@@ -71,7 +74,7 @@ class HashTableTest {
     }
 
     @Test
-    void shouldReturnFalseForNonContainedElements() {
+    void test_returnFalseForNonContainedElements() {
         HashTable<String, Integer> hashTable = createNonEmptyHashTable();
         assertFalse(hashTable.containsKey("Ted"));
         assertFalse(hashTable.containsKey("Barney"));
@@ -80,7 +83,7 @@ class HashTableTest {
     }
 
     @Test
-    void shouldRemoveElements() {
+    void test_removeElements() {
         HashTable<String, Integer> hashTable = createNonEmptyHashTable();
         hashTable.remove("Luke");
         hashTable.remove("Manny");
@@ -92,7 +95,7 @@ class HashTableTest {
     }
 
     @Test
-    void shouldThrowExceptionOnNullArguments() {
+    void test_throwExceptionOnNullArguments() {
         HashTable<String, Integer> hashTable = new HashTable<>();
         assertThrows(IllegalArgumentException.class, () -> hashTable.get(null));
         assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, 99));
@@ -103,7 +106,7 @@ class HashTableTest {
     }
 
     @Test
-    void shouldThrowExceptionOnNonContainedElements() {
+    void test_throwExceptionOnNonContainedElements() {
         HashTable<String, Integer> hashTable = createNonEmptyHashTable();
         assertThrows(NoSuchElementException.class, () -> hashTable.remove("Ted"));
         assertThrows(NoSuchElementException.class, () -> hashTable.get("Ted"));

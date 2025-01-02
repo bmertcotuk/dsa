@@ -2,12 +2,16 @@ package com.bmcotuk.dsaa.datastructures;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ArrayListTest {
 
     @Test
-    void shouldAddElementsLessThanInitialCapacity() {
+    void test_addElementsLessThanInitialCapacity() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(5);
         list.add(7);
@@ -19,7 +23,7 @@ class ArrayListTest {
     }
 
     @Test
-    void shouldAddElementsMoreThanInitialCapacity() {
+    void test_addElementsMoreThanInitialCapacity() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(11);
         list.add(10);
@@ -38,7 +42,7 @@ class ArrayListTest {
     }
 
     @Test
-    void shouldThrowIndexOutOfBoundsExceptionOnInvalidIndex() {
+    void test_throwIndexOutOfBoundsExceptionOnInvalidIndex() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(5);
         list.add(7);
@@ -47,7 +51,7 @@ class ArrayListTest {
     }
 
     @Test
-    void shouldRemoveElement() {
+    void test_removeElement() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(5);
         list.add(7);
@@ -61,13 +65,13 @@ class ArrayListTest {
     }
 
     @Test
-    void shouldThrowIndexOutOfBoundsExceptionOnDeletionFromEmptyList() {
+    void test_throwIndexOutOfBoundsExceptionOnDeletionFromEmptyList() {
         ArrayList<Integer> list = new ArrayList<>();
         assertThrows(IndexOutOfBoundsException.class, () -> list.remove(0));
     }
 
     @Test
-    void shouldReturnTrueFromIsEmptyForEmptyList() {
+    void test_returnTrueFromIsEmptyForEmptyList() {
         ArrayList<Integer> list = new ArrayList<>();
         assertTrue(list.isEmpty());
         list.add(5);
@@ -76,26 +80,26 @@ class ArrayListTest {
     }
 
     @Test
-    void shouldReturnFalseFromIsEmptyFromNonEmptyList() {
+    void test_returnFalseFromIsEmptyFromNonEmptyList() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(5);
         assertFalse(list.isEmpty());
     }
 
     @Test
-    void shouldHaveSizeZeroWhenJustCreated() {
+    void test_haveSizeZeroWhenJustCreated() {
         ArrayList<Integer> list = new ArrayList<>();
         assertEquals(0, list.size());
     }
 
     @Test
-    void shouldThrowExceptionOnNullArgumentForAddOperation() {
+    void test_throwExceptionOnNullArgumentForAddOperation() {
         ArrayList<Integer> list = new ArrayList<>();
         assertThrows(IllegalArgumentException.class, () -> list.add(null));
     }
 
     @Test
-    void shouldNotThrowExceptionOnNullArgumentForAddOperation() {
+    void test_notThrowExceptionOnNullArgumentForAddOperation() {
         ArrayList<Integer> list = new ArrayList<>();
         assertDoesNotThrow(() -> list.addWithoutNullCheck(null));
     }

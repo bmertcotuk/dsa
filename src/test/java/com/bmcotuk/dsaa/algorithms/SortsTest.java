@@ -14,7 +14,7 @@ class SortsTest {
     private Sorts sorts;
 
     @Test
-    void shouldSortWithRadixSort() {
+    void test_sortWithRadixSort() {
         int[] arr = {51, 12, 61, 21, 38, 49};
         int[] expected = {12, 21, 38, 49, 51, 61};
         sorts.radixSort(arr);
@@ -34,10 +34,15 @@ class SortsTest {
         int[] expected4 = {};
         sorts.radixSort(arr4);
         assertArrayEquals(expected4, arr4);
+
+        int[] arr5 = {351, 412, 161, 521, 38, 9};
+        int[] expected5 = {9, 38, 161, 351, 412, 521};
+        sorts.radixSort(arr5);
+        assertArrayEquals(expected5, arr5);
     }
 
     @Test
-    void shouldSortWithQuickSort() {
+    void test_sortWithQuickSort() {
         int[] arr = {5, 1, 6, 2, 3, 4};
         int[] expected = {1, 2, 3, 4, 5, 6};
         sorts.quickSort(arr, 0, arr.length - 1);
@@ -60,7 +65,7 @@ class SortsTest {
     }
 
     @Test
-    void shouldSortWithSelectionSort() {
+    void test_sortWithSelectionSort() {
         int[] arr = {5, 1, 6, 2, 3, 4};
         int[] expected = {1, 2, 3, 4, 5, 6};
         sorts.selectionSort(arr);
@@ -83,7 +88,7 @@ class SortsTest {
     }
 
     @Test
-    void shouldSortWithInsertionSort() {
+    void test_sortWithInsertionSort() {
         int[] arr = {5, 1, 6, 2, 3, 4};
         int[] expected = {1, 2, 3, 4, 5, 6};
         sorts.insertionSort(arr);
@@ -106,25 +111,71 @@ class SortsTest {
     }
 
     @Test
-    void shouldSortWithMergeSort() {
+    void test_sortWithMergeSort() {
         int[] arr = {5, 1, 6, 2, 3, 4};
         int[] expected = {1, 2, 3, 4, 5, 6};
-        sorts.mergeSort(arr, arr.length);
+        sorts.mergeSort(arr);
         assertArrayEquals(expected, arr);
 
         int[] arr2 = {5, 1, 2, 3, 4};
         int[] expected2 = {1, 2, 3, 4, 5};
-        sorts.mergeSort(arr2, arr2.length);
+        sorts.mergeSort(arr2);
         assertArrayEquals(expected2, arr2);
 
         int[] arr3 = {5};
         int[] expected3 = {5};
-        sorts.mergeSort(arr3, arr3.length);
+        sorts.mergeSort(arr3);
         assertArrayEquals(expected3, arr3);
 
         int[] arr4 = {};
         int[] expected4 = {};
-        sorts.mergeSort(arr4, arr4.length);
+        sorts.mergeSort(arr4);
+        assertArrayEquals(expected4, arr4);
+    }
+
+    @Test
+    void test_sortWithBubbleSort() {
+        int[] arr = {5, 1, 6, 2, 3, 4};
+        int[] expected = {1, 2, 3, 4, 5, 6};
+        sorts.bubbleSort(arr);
+        assertArrayEquals(expected, arr);
+
+        int[] arr2 = {5, 1, 2, 3, 4};
+        int[] expected2 = {1, 2, 3, 4, 5};
+        sorts.bubbleSort(arr2);
+        assertArrayEquals(expected2, arr2);
+
+        int[] arr3 = {5};
+        int[] expected3 = {5};
+        sorts.bubbleSort(arr3);
+        assertArrayEquals(expected3, arr3);
+
+        int[] arr4 = {};
+        int[] expected4 = {};
+        sorts.bubbleSort(arr4);
+        assertArrayEquals(expected4, arr4);
+    }
+
+    @Test
+    void test_sortWithBucketSort() {
+        int[] arr = {5, 1, 6, 2, 3, 4};
+        int[] expected = {1, 2, 3, 4, 5, 6};
+        sorts.bucketSort(arr);
+        assertArrayEquals(expected, arr);
+
+        int[] arr2 = {5, 1, 2, 3, 4};
+        int[] expected2 = {1, 2, 3, 4, 5};
+        sorts.bucketSort(arr2);
+        assertArrayEquals(expected2, arr2);
+
+        int[] arr3 = {5};
+        int[] expected3 = {5};
+        sorts.bucketSort(arr3);
+        assertArrayEquals(expected3, arr3);
+
+        int[] arr4 = {};
+        int[] expected4 = {};
+        sorts.bucketSort(arr4);
         assertArrayEquals(expected4, arr4);
     }
 }

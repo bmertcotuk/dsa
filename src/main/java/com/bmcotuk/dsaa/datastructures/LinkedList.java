@@ -40,17 +40,18 @@ public class LinkedList<T> {
     // data is still what defines an object and is checked in `equals()`
     public void remove(T data) {
         validateData(data);
-        Node<T> nodeToBeRemoved = new Node<>(data);
-        Node<T> currentNode = head;
-
-        // head is a special case so deserves to be outside of the loop
-        if (currentNode.equals(nodeToBeRemoved)) {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        // head is a special case so deserves to be outside the loop
+        if (head.getData().equals(data)) {
             head = head.getNext();
             size--;
             return;
         }
+        Node<T> currentNode = head;
         while (currentNode.getNext() != null) {
-            if (currentNode.getNext().equals(nodeToBeRemoved)) {
+            if (currentNode.getNext().getData().equals(data)) {
                 // no problem even if it is the tail
                 currentNode.setNext(currentNode.getNext().getNext());
                 size--;
