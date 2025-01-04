@@ -14,7 +14,7 @@ public class Sorts {
     /**
      * ----> d: number of digits
      * ----> b: base of numbers (e.g. 10)
-     * ----> k is the largest element
+     * ----> k: the largest element
      * <p>
      * time: O(d*(n+b))
      * space: O(k+n)
