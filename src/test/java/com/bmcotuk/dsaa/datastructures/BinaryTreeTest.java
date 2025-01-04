@@ -1,5 +1,6 @@
 package com.bmcotuk.dsaa.datastructures;
 
+import com.bmcotuk.dsaa.common.BinaryTreeNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -98,7 +99,196 @@ class BinaryTreeTest {
     }
 
     @Test
-    void test_empty() {
+    void test_getRoot() {
+        int expected = 5;
+        BinaryTree tree = new BinaryTree();
+        tree.add(expected);
+
+        assertEquals(expected, tree.getRoot().getData());
+    }
+
+    @Test
+    void test_isFull() {
+        BinaryTree tree = new BinaryTree();
+        assertTrue(tree.isFull());
+
+        tree.add(8);
+        assertTrue(tree.isFull());
+
+        tree.add(5);
+        assertFalse(tree.isFull());
+
+        tree.add(13);
+        assertTrue(tree.isFull());
+
+        tree.add(26);
+        assertFalse(tree.isFull());
+
+        tree.add(3);
+        assertTrue(tree.isFull());
+
+        tree.add(1);
+        assertFalse(tree.isFull());
+
+        tree.add(14);
+        assertTrue(tree.isFull());
+
+        tree.add(9);
+        assertFalse(tree.isFull());
+
+        tree.remove(13);
+        assertTrue(tree.isFull());
+    }
+
+    @Test
+    void test_isComplete() {
+        BinaryTree tree = new BinaryTree();
+        assertTrue(tree.isComplete());
+
+        tree.add(8);
+        assertTrue(tree.isComplete());
+
+        tree.getRoot()
+                .setLeft(new BinaryTreeNode(5));
+        assertTrue(tree.isComplete());
+
+        tree.getRoot()
+                .setRight(new BinaryTreeNode(13));
+        assertTrue(tree.isComplete());
+
+        tree.getRoot()
+                .getLeft()
+                .setRight(new BinaryTreeNode(26));
+        assertFalse(tree.isComplete());
+
+        tree.getRoot()
+                .getLeft()
+                .setLeft(new BinaryTreeNode(3));
+        assertTrue(tree.isComplete());
+
+        tree.getRoot()
+                .getRight()
+                .setRight(new BinaryTreeNode(1));
+        assertFalse(tree.isComplete());
+
+        tree.getRoot()
+                .getRight()
+                .setLeft(new BinaryTreeNode(14));
+        assertTrue(tree.isComplete());
+
+        tree.getRoot()
+                .getRight()
+                .getRight()
+                .setLeft(new BinaryTreeNode(9));
+        assertFalse(tree.isComplete());
+
+        tree.getRoot()
+                .getRight()
+                .getRight()
+                .setRight(new BinaryTreeNode(13));
+        assertFalse(tree.isComplete());
+    }
+
+    @Test
+    void test_isPerfect() {
+        BinaryTree tree = new BinaryTree();
+        assertTrue(tree.isPerfect());
+
+        tree.add(8);
+        assertTrue(tree.isPerfect());
+
+        tree.getRoot()
+                .setLeft(new BinaryTreeNode(5));
+        assertFalse(tree.isPerfect());
+
+        tree.getRoot()
+                .setRight(new BinaryTreeNode(13));
+        assertTrue(tree.isPerfect());
+
+        tree.getRoot()
+                .getLeft()
+                .setRight(new BinaryTreeNode(26));
+        assertFalse(tree.isPerfect());
+
+        tree.getRoot()
+                .getLeft()
+                .setLeft(new BinaryTreeNode(3));
+        assertFalse(tree.isPerfect());
+
+        tree.getRoot()
+                .getRight()
+                .setRight(new BinaryTreeNode(1));
+        assertFalse(tree.isPerfect());
+
+        tree.getRoot()
+                .getRight()
+                .setLeft(new BinaryTreeNode(14));
+        assertTrue(tree.isPerfect());
+
+        tree.getRoot()
+                .getRight()
+                .getRight()
+                .setLeft(new BinaryTreeNode(9));
+        assertFalse(tree.isPerfect());
+
+        tree.getRoot()
+                .getRight()
+                .getRight()
+                .setRight(new BinaryTreeNode(13));
+        assertFalse(tree.isPerfect());
+    }
+
+    @Test
+    void test_isBinarySearchTree() {
+        BinaryTree tree = new BinaryTree();
+        assertTrue(tree.isBinarySearchTree());
+
+        tree.add(8);
+        assertTrue(tree.isBinarySearchTree());
+
+        tree.getRoot()
+                .setLeft(new BinaryTreeNode(5));
+        assertTrue(tree.isBinarySearchTree());
+
+        tree.getRoot()
+                .setRight(new BinaryTreeNode(13));
+        assertTrue(tree.isBinarySearchTree());
+
+        tree.getRoot()
+                .getLeft()
+                .setRight(new BinaryTreeNode(26));
+        assertFalse(tree.isBinarySearchTree());
+
+        tree.getRoot()
+                .getLeft()
+                .setLeft(new BinaryTreeNode(3));
+        assertFalse(tree.isBinarySearchTree());
+
+        tree.getRoot()
+                .getRight()
+                .setRight(new BinaryTreeNode(1));
+        assertFalse(tree.isBinarySearchTree());
+
+        tree.getRoot()
+                .getRight()
+                .setLeft(new BinaryTreeNode(14));
+        assertFalse(tree.isBinarySearchTree());
+
+        tree.getRoot()
+                .getRight()
+                .getRight()
+                .setLeft(new BinaryTreeNode(9));
+        assertFalse(tree.isBinarySearchTree());
+
+        tree.getRoot()
+                .getRight()
+                .getRight()
+                .setRight(new BinaryTreeNode(13));
+        assertFalse(tree.isBinarySearchTree());
+    }
+
+    @Test
+    void test_isEmpty() {
         BinaryTree tree = new BinaryTree();
         assertTrue(tree.isEmpty());
         tree.add(2);
@@ -108,45 +298,23 @@ class BinaryTreeTest {
     @Test
     void test_level() {
         BinaryTree tree = new BinaryTree();
+        assertEquals(-1, tree.getLevel());
+        tree.add(8);
         assertEquals(0, tree.getLevel());
-        tree.add(8);
+        tree.add(11);
         assertEquals(1, tree.getLevel());
-        tree.add(11);
-        assertEquals(2, tree.getLevel());
         tree.add(7);
+        assertEquals(1, tree.getLevel());
+        tree.add(14);
         assertEquals(2, tree.getLevel());
-        tree.add(14);
-        assertEquals(3, tree.getLevel());
         tree.add(22);
-        assertEquals(3, tree.getLevel());
+        assertEquals(2, tree.getLevel());
         tree.add(13);
-        assertEquals(3, tree.getLevel());
+        assertEquals(2, tree.getLevel());
         tree.add(3);
+        assertEquals(2, tree.getLevel());
+        tree.add(5);
         assertEquals(3, tree.getLevel());
-        tree.add(5);
-        assertEquals(4, tree.getLevel());
-    }
-
-    @Test
-    void test_depth() {
-        BinaryTree tree = new BinaryTree();
-        assertEquals(0, tree.getDepth());
-        tree.add(8);
-        assertEquals(0, tree.getDepth());
-        tree.add(11);
-        assertEquals(1, tree.getDepth());
-        tree.add(7);
-        assertEquals(1, tree.getDepth());
-        tree.add(14);
-        assertEquals(2, tree.getDepth());
-        tree.add(22);
-        assertEquals(2, tree.getDepth());
-        tree.add(13);
-        assertEquals(2, tree.getDepth());
-        tree.add(3);
-        assertEquals(2, tree.getDepth());
-        tree.add(5);
-        assertEquals(3, tree.getDepth());
     }
 
     @Test

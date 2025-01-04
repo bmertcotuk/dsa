@@ -21,10 +21,6 @@ public class BinaryTree {
         return root;
     }
 
-    public void setRoot(int data) {
-        root = new BinaryTreeNode(data);
-    }
-
     public int size() {
         return size;
     }
@@ -205,12 +201,13 @@ public class BinaryTree {
     }
 
     /**
-     * Each level except the deepest level (leaves) should be full. Leaves should be filled from left to right.
+     * Each level except the leaves should be full. Leaves should be filled from left to right.
+     * <p>
+     * BFS traverses level-based. A leaf simply has no children. Order in while loop ensures the condition of "filling from left to right" in the same level, i.e. leaf level.
      * <p>
      * time: O(n)
      * space: O(n)
      */
-    // TODO: Check from left to right case
     public boolean isComplete() {
         if (root == null) {
             return true;
@@ -218,26 +215,26 @@ public class BinaryTree {
 
         Queue<BinaryTreeNode> queue = new LinkedList<>();
         queue.offer(root);
-        boolean hasNonFullNode = false;
+        boolean lacksOneChild = false;
         while (!queue.isEmpty()) {
             BinaryTreeNode current = queue.poll();
 
             if (current.getLeft() != null) {
-                if (hasNonFullNode) {
-                    return false; // non-full node but it was not the leaf
+                if (lacksOneChild) {
+                    return false; // non-full node and it was not the leaf
                 }
                 queue.offer(current.getLeft());
             } else {
-                hasNonFullNode = true; // found a non-full node
+                lacksOneChild = true; // found a non-full node
             }
 
             if (current.getRight() != null) {
-                if (hasNonFullNode) {
-                    return false; // non-full node but it was not the leaf
+                if (lacksOneChild) {
+                    return false; // non-full node and it was not the leaf
                 }
                 queue.offer(current.getRight());
             } else {
-                hasNonFullNode = true; // found a non-full node
+                lacksOneChild = true; // found a non-full node
             }
         }
         return true;
@@ -254,28 +251,28 @@ public class BinaryTree {
             return true;
         }
 
-        int level = getLevel();
-        return isPerfectRecursion(root, level, 0);
+        int maxLevel = getLevel();
+        return isPerfectRecursion(root, 0, maxLevel);
     }
 
-    private boolean isPerfectRecursion(BinaryTreeNode node, int depth, int level) {
+    private boolean isPerfectRecursion(BinaryTreeNode node, int currentLevel, int maxLevel) {
         if (node == null) {
             return true;
         }
 
         // check if leaf node is at the correct depth
         if (node.getLeft() == null && node.getRight() == null) {
-            return depth == level + 1;
+            return maxLevel == currentLevel;
         }
 
-        // a node has only one child, it's not perfect
+        // a node can only have 0 or 2 children
         if (node.getLeft() == null || node.getRight() == null) {
             return false;
         }
 
         // recursively check left and right subtrees.
-        return isPerfectRecursion(node.getLeft(), depth, level + 1)
-                && isPerfectRecursion(node.getRight(), depth, level + 1);
+        return isPerfectRecursion(node.getLeft(), currentLevel + 1, maxLevel)
+                && isPerfectRecursion(node.getRight(), currentLevel + 1, maxLevel);
     }
 
     public boolean isBinarySearchTree() {
@@ -319,17 +316,15 @@ public class BinaryTree {
         }
     }
 
-    public int getDepth() {
-        return Math.max(getLevel() - 1, 0);
-    }
-
+    // root is assumed to have level 0, therefore "level" and "depth" are interchangeable
+    // empty tree is assumed to have level/depth -1
     public int getLevel() {
         return maxLevelFromNode(root);
     }
 
     int maxLevelFromNode(BinaryTreeNode node) {
         if (node == null) {
-            return 0;
+            return -1;
         }
         return 1 + Math.max(maxLevelFromNode(node.getLeft()), maxLevelFromNode(node.getRight()));
     }
@@ -340,7 +335,7 @@ public class BinaryTree {
             return "";
         }
 
-        int maxLevel = getLevel();
+        int maxLevel = getLevel() + 1;
         int maxWidth = (int) Math.pow(2, maxLevel) - 1;
         StringBuilder sb = new StringBuilder();
 

@@ -271,6 +271,26 @@ class BinarySearchTreeTest {
         assertEquals(expected, outContent.toString());
     }
 
+    @Test
+    void test_isBinarySearchTree() {
+        BinaryTree tree = new BinarySearchTree();
+        assertTrue(tree.isBinarySearchTree());
+
+        tree.add(5);
+        assertTrue(tree.isBinarySearchTree());
+
+        tree.add(3);
+        assertTrue(tree.isBinarySearchTree());
+
+        tree.add(7);
+        assertTrue(tree.isBinarySearchTree());
+
+        tree.add(8);
+        assertTrue(tree.isBinarySearchTree());
+
+        tree.add(2);
+        assertTrue(tree.isBinarySearchTree());
+    }
 
     /*
                    8

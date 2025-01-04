@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class OtherAlgorithmsTest {
@@ -150,6 +151,13 @@ class OtherAlgorithmsTest {
     }
 
     @Test
+    void test_printPowersOf2UntilN_error() {
+        otherAlgorithms.printPowersOf2UntilN(0);
+        String actual = outContent.toString();
+        assertTrue(actual.isEmpty());
+    }
+
+    @Test
     void test_printAllSortedPermutationsInTheAlphabetOfLength() {
         otherAlgorithms.printAllSortedPermutationsInTheAlphabetOfLength(3, "");
         String expected = "abc\n" +
@@ -232,6 +240,9 @@ class OtherAlgorithmsTest {
         array1 = new int[]{1, 2, 3};
         array2 = new int[]{4, 5, 6};
         assertEquals(0, otherAlgorithms.findTheNumberOfElementsInCommon(array1, array2));
+        array1 = new int[]{11, 22, 33};
+        array2 = new int[]{4, 5, 6};
+        assertEquals(0, otherAlgorithms.findTheNumberOfElementsInCommon(array1, array2));
         array1 = new int[]{1, 1, 3};
         array2 = new int[]{1, 1, 4};
         assertEquals(2, otherAlgorithms.findTheNumberOfElementsInCommon(array1, array2));
@@ -245,6 +256,13 @@ class OtherAlgorithmsTest {
         int[] input = new int[]{1, 2, 3, 4, 5, 6};
         int[] expected = new int[]{1, 4, 2, 5, 3, 6};
         assertArrayEquals(expected, otherAlgorithms.rearrangeArrayWithRunnerTechnique(input));
+    }
+
+    @Test
+    void test_rearrangeArrayWithRunnerTechnique_null() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> otherAlgorithms.rearrangeArrayWithRunnerTechnique(null));
     }
 
     @Test
@@ -293,6 +311,14 @@ class OtherAlgorithmsTest {
         currentNode = currentNode.getNext();
         assertEquals(7, currentNode.getData());
     }
+
+    @Test
+    void test_rearrangeLinkedListWithRunnerTechnique_null() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> otherAlgorithms.rearrangeLinkedListWithRunnerTechnique(null));
+    }
+
 
     @Test
     void test_notRearrangeSmallOrEmptyListWithRunnerTechnique() {
