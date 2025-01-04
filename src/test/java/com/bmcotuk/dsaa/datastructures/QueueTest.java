@@ -2,8 +2,6 @@ package com.bmcotuk.dsaa.datastructures;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.NoSuchElementException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -77,12 +75,12 @@ class QueueTest {
     @Test
     void test_throwExceptionOnEmptyQueueForDequeueOperation() {
         Queue<Integer> queue = new Queue<>();
-        assertThrows(NoSuchElementException.class, () -> queue.dequeue());
+        assertThrows(IllegalStateException.class, () -> queue.dequeue());
     }
 
     @Test
     void test_throwExceptionOnEmptyQueueForPeekOperation() {
         Queue<Integer> queue = new Queue<>();
-        assertThrows(NoSuchElementException.class, () -> queue.peek());
+        assertThrows(IllegalStateException.class, () -> queue.peek());
     }
 }

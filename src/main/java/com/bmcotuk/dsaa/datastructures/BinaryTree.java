@@ -139,19 +139,19 @@ public class BinaryTree {
         // last node of the tree as a replacement value
         targetNode.setData(lastNode.getData());
         // remove last node - replacement node
-        removeLastNode(lastNode);
+        removeNode(lastNode);
         size--;
     }
 
     // we check by object reference, therefore, we know that we are deleting the correct node
-    private void removeLastNode(BinaryTreeNode lastNode) {
+    void removeNode(BinaryTreeNode nodeToBeDeleted) {
         Queue<BinaryTreeNode> queue = new LinkedList<>();
         queue.offer(root);
         while (!queue.isEmpty()) {
             BinaryTreeNode currentNode = queue.poll();
 
             if (currentNode.getLeft() != null) {
-                if (currentNode.getLeft() == lastNode) {
+                if (currentNode.getLeft() == nodeToBeDeleted) {
                     currentNode.setLeft(null);
                     return;
                 } else {
@@ -160,7 +160,7 @@ public class BinaryTree {
             }
 
             if (currentNode.getRight() != null) {
-                if (currentNode.getRight() == lastNode) {
+                if (currentNode.getRight() == nodeToBeDeleted) {
                     currentNode.setRight(null);
                     return;
                 } else {
@@ -290,6 +290,14 @@ public class BinaryTree {
 
         return isBinarySearchTreeRecursion(node.getLeft(), min, node.getData())
                 && isBinarySearchTreeRecursion(node.getRight(), node.getData(), max);
+    }
+
+    public boolean isMinHeap() {
+        return false;
+    }
+
+    public boolean isMaxHeap() {
+        return false;
     }
 
     public void traversePreOrderDFS(BinaryTreeNode node) {

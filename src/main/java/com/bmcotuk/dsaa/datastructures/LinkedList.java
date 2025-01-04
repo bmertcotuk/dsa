@@ -41,7 +41,7 @@ public class LinkedList<T> {
     public void remove(T data) {
         validateData(data);
         if (isEmpty()) {
-            throw new NoSuchElementException();
+            throw new IllegalStateException("LinkedList is empty.");
         }
         // head is a special case so deserves to be outside the loop
         if (head.getData().equals(data)) {

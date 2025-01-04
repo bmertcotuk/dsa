@@ -2,8 +2,6 @@ package com.bmcotuk.dsaa.datastructures;
 
 import com.bmcotuk.dsaa.common.Node;
 
-import java.util.NoSuchElementException;
-
 /**
  * @author Mert Cotuk
  */
@@ -62,7 +60,7 @@ public class Queue<T> {
 
     private void validateNotEmpty() {
         if (first == null) {
-            throw new NoSuchElementException();
+            throw new IllegalStateException("Queue is empty.");
         }
     }
 }
