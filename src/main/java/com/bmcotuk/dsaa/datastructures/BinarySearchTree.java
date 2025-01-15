@@ -12,8 +12,10 @@ public class BinarySearchTree extends BinaryTree {
         super();
     }
 
-
-    // pass the root as the only start
+    /**
+     * time: O(logn) - O(n) if skewed
+     * space: O(logn) - O(n) if skewed
+     */
     @Override
     public void add(int data) {
         root = addRecursion(root, data);
@@ -35,6 +37,10 @@ public class BinarySearchTree extends BinaryTree {
         return node;
     }
 
+    /**
+     * time: O(logn) - O(n) if skewed
+     * space: O(logn) - O(n) if skewed
+     */
     @Override
     public boolean contains(int data) {
         return containsRecursion(root, data);
@@ -55,7 +61,12 @@ public class BinarySearchTree extends BinaryTree {
         }
     }
 
-    // we only use the deepest node in order to maintain the balance of a binary tree
+    /**
+     * We only use the deepest node in order to maintain the balance of a binary tree.
+     * <p>
+     * time: O(logn) - O(n) if skewed
+     * space: O(logn) - O(n) if skewed
+     */
     @Override
     public void remove(int data) {
         root = removeRecursion(root, data);

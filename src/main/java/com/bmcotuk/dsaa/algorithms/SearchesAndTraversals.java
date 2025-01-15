@@ -1,7 +1,6 @@
 package com.bmcotuk.dsaa.algorithms;
 
 import com.bmcotuk.dsaa.common.BinaryTreeNode;
-import com.bmcotuk.dsaa.datastructures.Graph;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -55,18 +54,6 @@ public class SearchesAndTraversals {
         } else {
             return mid;
         }
-    }
-
-    public void depthFirstTraversalGraphIterative(Graph graph) {
-
-    }
-
-    public void depthFirstTraversalGraphRecursive(Graph graph) {
-
-    }
-
-    public void breadthFirstTraversalGraph(Graph graph) {
-
     }
 
     public void breadthFirstTraversalBinaryTree(BinaryTreeNode node) {

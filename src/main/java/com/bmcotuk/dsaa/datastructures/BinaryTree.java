@@ -275,6 +275,10 @@ public class BinaryTree {
                 && isPerfectRecursion(node.getRight(), currentLevel + 1, maxLevel);
     }
 
+    /**
+     * time: O(n)
+     * space: O(n)
+     */
     public boolean isBinarySearchTree() {
         return isBinarySearchTreeRecursion(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
@@ -292,14 +296,64 @@ public class BinaryTree {
                 && isBinarySearchTreeRecursion(node.getRight(), node.getData(), max);
     }
 
+    /**
+     * time: O(n)
+     * space: O(n)
+     */
     public boolean isMinHeap() {
-        return false;
+        if (!isComplete()) {
+            return false;
+        }
+        return isMinHeapRecursion(root);
     }
 
+    private boolean isMinHeapRecursion(BinaryTreeNode node) {
+        if (node == null) {
+            return true;
+        }
+        if (node.getLeft() != null
+                && (node.getData() > node.getLeft().getData())) {
+            return false;
+        }
+        if (node.getRight() != null
+                && (node.getData() > node.getRight().getData())) {
+            return false;
+        }
+        return isMinHeapRecursion(node.getLeft())
+                && isMinHeapRecursion(node.getRight());
+    }
+
+    /**
+     * time: O(n)
+     * space: O(n)
+     */
     public boolean isMaxHeap() {
-        return false;
+        if (!isComplete()) {
+            return false;
+        }
+        return isMaxHeapRecursion(root);
     }
 
+    private boolean isMaxHeapRecursion(BinaryTreeNode node) {
+        if (node == null) {
+            return true;
+        }
+        if (node.getLeft() != null
+                && (node.getData() < node.getLeft().getData())) {
+            return false;
+        }
+        if (node.getRight() != null
+                && (node.getData() < node.getRight().getData())) {
+            return false;
+        }
+        return isMaxHeapRecursion(node.getLeft())
+                && isMaxHeapRecursion(node.getRight());
+    }
+
+    /**
+     * time: O(n)
+     * space: O(n)
+     */
     public void traversePreOrderDFS(BinaryTreeNode node) {
         if (node != null) {
             System.out.print(node.getData() + " ");
@@ -308,6 +362,10 @@ public class BinaryTree {
         }
     }
 
+    /**
+     * time: O(n)
+     * space: O(n)
+     */
     public void traverseInOrderDFS(BinaryTreeNode node) {
         if (node != null) {
             traverseInOrderDFS(node.getLeft());
@@ -316,6 +374,10 @@ public class BinaryTree {
         }
     }
 
+    /**
+     * time: O(n)
+     * space: O(n)
+     */
     public void traversePostOrderDFS(BinaryTreeNode node) {
         if (node != null) {
             traversePostOrderDFS(node.getLeft());
@@ -324,8 +386,12 @@ public class BinaryTree {
         }
     }
 
-    // root is assumed to have level 0, therefore "level" and "depth" are interchangeable
-    // empty tree is assumed to have level/depth -1
+    /**
+     * Root is assumed to have level 0, therefore "level" and "depth" are interchangeable. Empty tree is assumed to have level/depth -1.
+     * <p>
+     * time: O(n)
+     * space: O(n)
+     */
     public int getLevel() {
         return maxLevelFromNode(root);
     }

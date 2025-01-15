@@ -32,6 +32,14 @@ class LinkedListTest {
     }
 
     @Test
+    void test_removeFromEmptyList() {
+        LinkedList<String> list = new LinkedList<>();
+        assertThrows(
+                IllegalStateException.class,
+                () -> list.remove("a"));
+    }
+
+    @Test
     void test_removeElementFromHead() {
         LinkedList<String> list = new LinkedList<>();
         list.appendToTail("a");

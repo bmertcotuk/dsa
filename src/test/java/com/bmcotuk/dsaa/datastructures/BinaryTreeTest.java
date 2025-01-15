@@ -288,6 +288,56 @@ class BinaryTreeTest {
     }
 
     @Test
+    void test_isMinHeap_true() {
+        MinHeap heap = new MinHeap();
+        int[] values = {90, 55, 87, 4, 50, 7, 2};
+        heap.addMultiple(values);
+        assertTrue(heap.isMinHeap());
+    }
+
+    @Test
+    void test_isMinHeap_false() {
+        BinaryTree tree = new BinaryTree();
+        tree.addMultiple(5, 3, 7, 8, 2);
+        assertFalse(tree.isMinHeap());
+
+        BinaryTree tree2 = new BinaryTree();
+        tree2.addMultiple(5, 7, 3, 2, 8);
+        assertFalse(tree2.isMinHeap());
+
+        BinaryTree tree3 = new BinaryTree();
+        tree3.add(5);
+        tree3.getRoot()
+                .setRight(new BinaryTreeNode(7));
+        assertFalse(tree3.isMinHeap());
+    }
+
+    @Test
+    void test_isMaxHeap_true() {
+        MaxHeap heap = new MaxHeap();
+        int[] values = {90, 55, 87, 4, 50, 7, 2};
+        heap.addMultiple(values);
+        assertTrue(heap.isMaxHeap());
+    }
+
+    @Test
+    void test_isMaxHeap_false() {
+        BinaryTree tree = new BinaryTree();
+        tree.addMultiple(5, 3, 7, 8, 2);
+        assertFalse(tree.isMaxHeap());
+
+        BinaryTree tree2 = new BinaryTree();
+        tree2.addMultiple(5, 7, 3, 2, 8);
+        assertFalse(tree2.isMaxHeap());
+
+        BinaryTree tree3 = new BinaryTree();
+        tree3.add(5);
+        tree3.getRoot()
+                .setRight(new BinaryTreeNode(7));
+        assertFalse(tree3.isMaxHeap());
+    }
+
+    @Test
     void test_isEmpty() {
         BinaryTree tree = new BinaryTree();
         assertTrue(tree.isEmpty());
